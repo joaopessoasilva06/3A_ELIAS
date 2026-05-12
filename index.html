@@ -24,20 +24,75 @@
                 }
             
         </style>
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+            import {
+              getFirestore,
+              collection,
+              addDoc
+            } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+            const firebaseConfig = {
+              apiKey: "AIzaSyAHFWYbOZ1HT6ThRROXKXHDN5uR85-9obM",
+              authDomain: "aelias-a1f83.firebaseapp.com",
+              projectId: "aelias-a1f83",
+              storageBucket: "aelias-a1f83.firebasestorage.app",
+              messagingSenderId: "1094185857577",
+              appId: "1:1094185857577:web:9a9b6ae21dd34dc7b26238"
+            };
+
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+        
+            const form = document.getElementById("formUsuario");
+            const mensagem = document.getElementById("mensagem");
+        
+            form.addEventListener("submit", async (e) => {
+              e.preventDefault();
+
+          const cpf = document.getElementById("cpf").value;
+          const nome = document.getElementById("nome").value;
+          const email = document.getElementById("email").value;
+          const telefone = document.getElementById("telefone").value;
+          const senha = document.getElementById("senha").value;
+          const cep = document.getElementById("cep").value;
+          const idade = document.getElementById("idade").value;
+    
+          try {
+            await addDoc(collection(db, "usuarios"), {
+              cpf,
+              nome,
+              email,
+              telefone,
+              senha, 
+              cep,
+              idade
+            });
+
+            mensagem.textContent = "Usuário salvo com sucesso.";
+            mensagem.style.color = "green";
+            form.reset();
+          } catch (error) {
+            mensagem.textContent = "Erro ao salvar: " + error.message;
+            mensagem.style.color = "red";
+          }
+        });
+      </script>
     </head>
     <body>
-        <form>
+        <form  id="formUsuario">
             <fieldset>
                 <legend>Cadastro no Bnaco de Dados</legend>
-                <p class="texto">Nome:</p><input type="text" class="campo" placeholder="Digite o seu nome" maxlength="20" minlength="10" required><br>
-                <p class="texto">Idade:</p><input type="text" class="campo" placeholder="Digite a sua idade" maxlength="20" minlength="10" required><br>
-                <p class="texto">CEP:</p><input type="text" class="campo" placeholder="Digite o seu CEP" maxlength="20" minlength="10" required><br>
-                <p class="texto">Telefone:</p><input type="text" class="campo" placeholder="Digite o seu telefone" maxlength="20" minlength="10" required><br>
-                <p class="texto">Email:</p><input type="text" class="campo" placeholder="Digite o seu Email" maxlength="20" minlength="10" required><br>
-                <p class="texto">Senha:</p><input type="text" class="campo" placeholder="Digite a sua senha" maxlength="20" minlength="10" required><br>
-                <p class="texto">CPF:</p><input type="text" class="campo" placeholder="Digite o seu cpf" maxlength="20" minlength="10" required><br><br>
+                <p class="texto">Nome:</p><input type="text" id="nome" class="campo" placeholder="Digite o seu nome" maxlength="20" minlength="10" required><br>
+                <p class="texto">Idade:</p><input type="text" id="idade" class="campo" placeholder="Digite a sua idade" maxlength="20" minlength="10" required><br>
+                <p class="texto">CEP:</p><input type="text" id="cep" class="campo" placeholder="Digite o seu CEP" maxlength="20" minlength="10" required><br>
+                <p class="texto">Telefone:</p><input type="text" id="telefone" class="campo" placeholder="Digite o seu telefone" maxlength="20" minlength="10" required><br>
+                <p class="texto">Email:</p><input type="text" id="email" class="campo" placeholder="Digite o seu Email" maxlength="20" minlength="10" required><br>
+                <p class="texto">Senha:</p><input type="text" id="senha" class="campo" placeholder="Digite a sua senha" maxlength="20" minlength="10" required><br>
+                <p class="texto">CPF:</p><input type="text" id="cpf" class="campo" placeholder="Digite o seu cpf" maxlength="20" minlength="10" required><br><br>
                 <input type="submit" value="Cadastrar">
             </fieldset>
         </form>
+         <div id="mensagem"></div>
     </body>
 </html>
